@@ -1,0 +1,14 @@
+{
+  "admitted": true,
+  "reasons": [],
+  "provenance": {
+    "viewpoint": "reference",
+    "sourcePath": "/home/eduardo/Antigravity/3D/projects/sword-divine/reference.png",
+    "width": 462,
+    "height": 1024,
+    "foregroundCoverage": 0.139,
+    "largestComponentFraction": 0.9317,
+    "pHash": 12753560270544371712,
+    "duplicateOfHash": null
+  }
+}

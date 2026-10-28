@@ -1,0 +1,18 @@
+{
+  "boundary": "relative depth prior only; never metric scale or hidden geometry truth",
+  "device": "cpu",
+  "imageSize": [
+    462,
+    1024
+  ],
+  "kind": "relative-depth-prior",
+  "model": "depth-anything/Depth-Anything-V2-Small-hf",
+  "output": "/home/eduardo/Antigravity/3D/projects/sword-divine/depth.png",
+  "outputSha256": "8b2ed37be17b4825e4bcf59ffde011aa5fe031380646f055803a59cd92c78253",
+  "rawRange": [
+    0.8393572568893433,
+    4.058291435241699
+  ],
+  "sourceImage": "/home/eduardo/Antigravity/3D/projects/sword-divine/reference.png",
+  "sourceSha256": "ad82d6a14339eccf8d835b489cd8b3f534cc713957820a7a7cc78b5b8d09c0c2"
+}

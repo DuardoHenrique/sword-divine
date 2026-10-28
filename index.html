@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espada Divina (Divine Sword) - 3D Three.js</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 30%, #1a1e28 0%, #080a0f 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: #e0e6ed;
+    }
+    #canvas-container {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      overflow: hidden;
+    }
+    #canvas-container canvas {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+    }
+    #ui-header {
+      position: fixed;
+      top: 20px;
+      left: 24px;
+      pointer-events: none;
+      z-index: 100;
+    }
+    h1 {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #fff9e6 0%, #fbd472 50%, #e6a728 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px rgba(251, 212, 114, 0.4);
+    }
+    p.subtitle {
+      font-size: 12px;
+      letter-spacing: 1px;
+      color: #8c9cb0;
+      margin-top: 4px;
+    }
+    #camera-controls {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 100;
+      background: rgba(15, 20, 30, 0.85);
+      backdrop-filter: blur(14px);
+      padding: 8px 14px;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 215, 120, 0.25);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      pointer-events: auto;
+    }
+    .view-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #cbd5e1;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      pointer-events: auto;
+    }
+    .view-btn:hover {
+      background: rgba(255, 215, 120, 0.2);
+      border-color: rgba(255, 215, 120, 0.5);
+      color: #fff;
+    }
+    .view-btn.active {
+      background: linear-gradient(135deg, #fbd472, #e6a728);
+      color: #0b0f19;
+      font-weight: 700;
+      border-color: transparent;
+      box-shadow: 0 0 15px rgba(251, 212, 114, 0.5);
+    }
+    #ref-toggle {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 100;
+      background: rgba(15, 20, 30, 0.85);
+      backdrop-filter: blur(14px);
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #cbd5e1;
+      font-size: 13px;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: all 0.2s ease;
+    }
+    #ref-toggle:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+    #ref-overlay {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      height: 90vh;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 50;
+    }
+    #error-banner {
+      display: none;
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 99999;
+      background: rgba(185, 28, 28, 0.95);
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      max-width: 450px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    @media (max-width: 768px) {
+      #ui-header {
+        top: 12px;
+        left: 14px;
+        max-width: calc(100vw - 170px);
+      }
+      h1 {
+        font-size: 15px;
+        letter-spacing: 0.5px;
+        line-height: 1.2;
+      }
+      p.subtitle {
+        font-size: 9.5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      #camera-controls {
+        bottom: 12px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100vw - 20px);
+        max-width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+        justify-content: flex-start;
+        padding: 6px 8px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      #camera-controls::-webkit-scrollbar {
+        display: none;
+      }
+      .view-btn {
+        padding: 5px 11px;
+        font-size: 11px;
+        flex-shrink: 0;
+      }
+      #ref-toggle {
+        top: 64px;
+        left: 14px;
+        bottom: auto;
+        right: auto;
+        padding: 4px 10px;
+        font-size: 10.5px;
+      }
+      .lil-gui {
+        max-width: 160px !important;
+        font-size: 10.5px !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="canvas-container"></div>
+
+  <div id="ui-header">
+    <h1>Espada Divina • Three.js</h1>
+    <p class="subtitle">Procedural Crystal & Gold Sword • Quality-Gated Reconstruction</p>
+  </div>
+
+  <div id="camera-controls">
+    <button class="view-btn active" data-view="front">Frente (Referência)</button>
+    <button class="view-btn" data-view="persp">Perspectiva</button>
+    <button class="view-btn" data-view="guard">Guarda & Joia</button>
+    <button class="view-btn" data-view="blade">Lâmina Cristalina</button>
+    <button class="view-btn" data-view="pommel">Pomo & Punho</button>
+    <button class="view-btn" data-view="profile">Perfil</button>
+  </div>
+
+  <button id="ref-toggle">Ver Referência 2D (Overlay)</button>
+  <img id="ref-overlay" src="/reference.png" alt="Reference Art" />
+
+  <div id="error-banner"></div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

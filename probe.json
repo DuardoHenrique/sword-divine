@@ -1,0 +1,13 @@
+{
+  "path": "/home/eduardo/Antigravity/3D/projects/sword-divine/reference.png",
+  "type": "png",
+  "bytes": 597356,
+  "width": 462,
+  "height": 1024,
+  "aspectRatio": 0.451171875,
+  "technicalSuitability": "conditional",
+  "warnings": [
+    "low resolution; small geometry/material details may be unreliable"
+  ],
+  "note": "This is only technical image probing. Semantic object suitability still requires visual inspection."
+}
